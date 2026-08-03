@@ -10,6 +10,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./database": {
+      "types": "./dist/database.d.ts",
+      "import": "./dist/database.js"
     }
   },
   "files": [
@@ -36,7 +40,9 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@opoha/plugin-sdk": "file:../opoha-plugin-sdk"
+    "@opoha/plugin-sdk": "file:../opoha-plugin-sdk",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "0.3.27"
   },
   "devDependencies": {
     "@opoha/typescript-config": "file:../opoha-devkit/packages/typescript-config",

@@ -2,14 +2,31 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import {
+  MIGRATIONS_TABLE_NAME,
+  PLUGIN_ID,
+  entities,
+  migrations,
+} from './database.js';
 import storageLocalfs from './index.js';
 import {
   LocalFsStorageAdapter,
   resolveLocalFsRoot,
   resolveSafeStoragePath,
 } from './local-fs-adapter.js';
+import { StorageLocalfsInit1722685200000 } from './migrations/1722685200000-StorageLocalfsInit.js';
+
+function createQueryRunnerMock() {
+  const queries: string[] = [];
+  return {
+    queries,
+    query: vi.fn(async (sql: string) => {
+      queries.push(sql);
+    }),
+  };
+}
 
 describe('@opoha/plugin-storage-localfs', () => {
   it('exports definePlugin definition with storage-localfs id', () => {
@@ -82,5 +99,31 @@ describe('@opoha/plugin-storage-localfs', () => {
     } finally {
       await rm(root, { recursive: true, force: true });
     }
+  });
+
+  it('exposes plugin-owned entities and namespaced migrations table (E-04)', () => {
+    expect(PLUGIN_ID).toBe('storage-localfs');
+    expect(MIGRATIONS_TABLE_NAME).toBe('opoha_migrations_storage_localfs');
+    expect(entities).toHaveLength(1);
+    expect(migrations).toHaveLength(1);
+    expect(migrations[0]).toBe(StorageLocalfsInit1722685200000);
+  });
+
+  it('migration up/down owns only storage_localfs_settings (E-04/E-05)', async () => {
+    const migration = new StorageLocalfsInit1722685200000();
+    const upRunner = createQueryRunnerMock();
+    await migration.up(upRunner as never);
+    expect(upRunner.queries.join('\n')).toContain(
+      'CREATE TABLE "storage_localfs_settings"',
+    );
+    expect(upRunner.queries.join('\n')).not.toMatch(
+      /ALTER TABLE "(users|roles|files)"/i,
+    );
+
+    const downRunner = createQueryRunnerMock();
+    await migration.down(downRunner as never);
+    expect(downRunner.queries.join('\n')).toContain(
+      'DROP TABLE IF EXISTS "storage_localfs_settings"',
+    );
   });
 });
