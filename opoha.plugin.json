@@ -1,0 +1,10 @@
+{
+  "id": "storage-localfs",
+  "version": "0.1.0",
+  "contractVersion": "0.1",
+  "entry": "dist/index.js",
+  "displayName": "Local Filesystem Storage",
+  "description": "Local disk storage adapter — put/get/delete/getUrl (AC-MVP-043)",
+  "dependsOn": [],
+  "required": false
+}
