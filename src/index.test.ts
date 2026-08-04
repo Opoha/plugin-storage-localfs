@@ -4,12 +4,7 @@ import path from 'node:path';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  MIGRATIONS_TABLE_NAME,
-  PLUGIN_ID,
-  entities,
-  migrations,
-} from './database.js';
+import { MIGRATIONS_TABLE_NAME, PLUGIN_ID, entities, migrations } from './database.js';
 import storageLocalfs from './index.js';
 import {
   LocalFsStorageAdapter,
@@ -40,21 +35,23 @@ describe('@opoha/plugin-storage-localfs', () => {
     const graphql: Array<{ name: string; kind: string }> = [];
     const admin: unknown[] = [];
 
-    storageLocalfs.boot?.(createStubPluginContext('storage-localfs', {
-      registerGraphQL(input) {
-        graphql.push({ name: input.name, kind: input.kind });
-      },
-      registerProvider() {},
-      registerListener() {},
-      registerAdmin(contribution) {
-        admin.push(contribution);
-      },
-      registerPaymentProvider() {},
-      registerShippingMethod() {},
-      registerStorageAdapter(adapter) {
-        adapters.push({ code: adapter.code });
-      },
-    }));
+    storageLocalfs.boot?.(
+      createStubPluginContext('storage-localfs', {
+        registerGraphQL(input) {
+          graphql.push({ name: input.name, kind: input.kind });
+        },
+        registerProvider() {},
+        registerListener() {},
+        registerAdmin(contribution) {
+          admin.push(contribution);
+        },
+        registerPaymentProvider() {},
+        registerShippingMethod() {},
+        registerStorageAdapter(adapter) {
+          adapters.push({ code: adapter.code });
+        },
+      }),
+    );
 
     expect(adapters).toEqual([{ code: 'localfs' }]);
     expect(graphql).toEqual([{ name: 'localFsStorageRoot', kind: 'query' }]);
@@ -62,15 +59,11 @@ describe('@opoha/plugin-storage-localfs', () => {
   });
 
   it('resolves root from env and rejects path traversal', () => {
-    expect(
-      resolveLocalFsRoot(undefined, { OPOHA_STORAGE_LOCALFS_ROOT: '/tmp/x' }, '/cwd'),
-    ).toBe(path.resolve('/tmp/x'));
-    expect(resolveLocalFsRoot(undefined, {}, '/cwd')).toBe(
-      path.resolve('/cwd', '.opoha-storage'),
+    expect(resolveLocalFsRoot(undefined, { OPOHA_STORAGE_LOCALFS_ROOT: '/tmp/x' }, '/cwd')).toBe(
+      path.resolve('/tmp/x'),
     );
-    expect(() =>
-      resolveSafeStoragePath('/tmp/root', '../escape'),
-    ).toThrow(/invalid storage key/);
+    expect(resolveLocalFsRoot(undefined, {}, '/cwd')).toBe(path.resolve('/cwd', '.opoha-storage'));
+    expect(() => resolveSafeStoragePath('/tmp/root', '../escape')).toThrow(/invalid storage key/);
   });
 
   it('puts, gets, deletes, and builds URLs on disk', async () => {
@@ -113,12 +106,8 @@ describe('@opoha/plugin-storage-localfs', () => {
     const migration = new StorageLocalfsInit1722685200000();
     const upRunner = createQueryRunnerMock();
     await migration.up(upRunner as never);
-    expect(upRunner.queries.join('\n')).toContain(
-      'CREATE TABLE "storage_localfs_settings"',
-    );
-    expect(upRunner.queries.join('\n')).not.toMatch(
-      /ALTER TABLE "(users|roles|files)"/i,
-    );
+    expect(upRunner.queries.join('\n')).toContain('CREATE TABLE "storage_localfs_settings"');
+    expect(upRunner.queries.join('\n')).not.toMatch(/ALTER TABLE "(users|roles|files)"/i);
 
     const downRunner = createQueryRunnerMock();
     await migration.down(downRunner as never);

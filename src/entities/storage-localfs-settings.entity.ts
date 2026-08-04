@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 /** OWNER: @opoha/plugin-storage-localfs — settings for local root (ADR-0005). */
 @Entity({ name: 'storage_localfs_settings' })

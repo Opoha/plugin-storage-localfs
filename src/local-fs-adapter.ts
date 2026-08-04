@@ -1,11 +1,7 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-import type {
-  StorageAdapter,
-  StoragePutInput,
-  StoragePutResult,
-} from '@opoha/plugin-sdk';
+import type { StorageAdapter, StoragePutInput, StoragePutResult } from '@opoha/plugin-sdk';
 
 /**
  * Resolves the on-disk root for localfs storage.
@@ -37,9 +33,7 @@ export function resolveSafeStoragePath(root: string, key: string): string {
     throw new Error('storage key must not contain null bytes');
   }
   const normalizedKey = key.replace(/\\/g, '/').replace(/^\/+/, '');
-  if (
-    normalizedKey.split('/').some((segment) => segment === '..' || segment === '')
-  ) {
+  if (normalizedKey.split('/').some((segment) => segment === '..' || segment === '')) {
     throw new Error(`invalid storage key: ${key}`);
   }
   const resolved = path.resolve(root, normalizedKey);
