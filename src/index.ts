@@ -10,7 +10,7 @@ export {
 export type { LocalFsStorageAdapterOptions } from './local-fs-adapter.js';
 
 /**
- * Official local filesystem storage plugin (E-03 / AC-MVP-043).
+ * Official local filesystem storage plugin.
  * Registers StorageAdapter with put/get/delete/getUrl on local disk.
  */
 export default definePlugin({

@@ -1,6 +1,6 @@
 # Local Filesystem Storage Plugin
 
-Official `@opoha/plugin-storage-localfs` — implements the Opoha files storage port on local disk (MVP E-03 / AC-MVP-043).
+Official `@opoha/plugin-storage-localfs` — implements the Opoha files storage port on local disk.
 
 ## What it registers
 

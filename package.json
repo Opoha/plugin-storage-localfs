@@ -1,7 +1,7 @@
 {
   "name": "@opoha/plugin-storage-localfs",
   "version": "1.0.0",
-  "description": "Official Opoha local filesystem storage adapter plugin (MVP E-03)",
+ "description": "Official Opoha local filesystem storage adapter plugin",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
