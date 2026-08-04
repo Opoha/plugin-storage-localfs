@@ -17,6 +17,7 @@ import {
   resolveSafeStoragePath,
 } from './local-fs-adapter.js';
 import { StorageLocalfsInit1722685200000 } from './migrations/1722685200000-StorageLocalfsInit.js';
+import { createStubPluginContext } from '@opoha/plugin-sdk';
 
 function createQueryRunnerMock() {
   const queries: string[] = [];
@@ -39,8 +40,7 @@ describe('@opoha/plugin-storage-localfs', () => {
     const graphql: Array<{ name: string; kind: string }> = [];
     const admin: unknown[] = [];
 
-    storageLocalfs.boot?.({
-      pluginId: 'storage-localfs',
+    storageLocalfs.boot?.(createStubPluginContext('storage-localfs', {
       registerGraphQL(input) {
         graphql.push({ name: input.name, kind: input.kind });
       },
@@ -54,7 +54,7 @@ describe('@opoha/plugin-storage-localfs', () => {
       registerStorageAdapter(adapter) {
         adapters.push({ code: adapter.code });
       },
-    });
+    }));
 
     expect(adapters).toEqual([{ code: 'localfs' }]);
     expect(graphql).toEqual([{ name: 'localFsStorageRoot', kind: 'query' }]);
