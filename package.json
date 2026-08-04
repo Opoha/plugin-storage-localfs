@@ -1,6 +1,6 @@
 {
   "name": "@opoha/plugin-storage-localfs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Official Opoha local filesystem storage adapter plugin",
   "license": "MIT",
   "type": "module",
@@ -17,6 +17,8 @@
     }
   },
   "files": [
+    "LICENSE",
+    "README.md",
     "dist",
     "opoha.plugin.json"
   ],
