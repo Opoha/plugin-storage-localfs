@@ -1,7 +1,7 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
- * Initial settings table for localfs storage (E-04 / ADR-0005).
+ * Initial settings table for localfs storage (ADR-0005).
  * Table prefix: plugin id `storage-localfs` → `storage_localfs_*`.
  * Blob bytes stay on disk; this table only stores optional config.
  */

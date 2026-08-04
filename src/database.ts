@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 /**
- * Plugin-owned TypeORM surface for CLI / host migration aggregation (E-04).
+ * Plugin-owned TypeORM surface for CLI / host migration aggregation.
  */
 
 import { StorageLocalfsSettingsEntity } from './entities/storage-localfs-settings.entity.js';

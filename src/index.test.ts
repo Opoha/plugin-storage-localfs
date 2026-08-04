@@ -94,7 +94,7 @@ describe('@opoha/plugin-storage-localfs', () => {
     }
   });
 
-  it('exposes plugin-owned entities and namespaced migrations table (E-04)', () => {
+  it('exposes plugin-owned entities and namespaced migrations table', () => {
     expect(PLUGIN_ID).toBe('storage-localfs');
     expect(MIGRATIONS_TABLE_NAME).toBe('opoha_migrations_storage_localfs');
     expect(entities).toHaveLength(1);
@@ -102,7 +102,7 @@ describe('@opoha/plugin-storage-localfs', () => {
     expect(migrations[0]).toBe(StorageLocalfsInit1722685200000);
   });
 
-  it('migration up/down owns only storage_localfs_settings (E-04/E-05)', async () => {
+  it('migration up/down owns only storage_localfs_settings', async () => {
     const migration = new StorageLocalfsInit1722685200000();
     const upRunner = createQueryRunnerMock();
     await migration.up(upRunner as never);
